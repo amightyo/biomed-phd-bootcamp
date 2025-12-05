@@ -43,3 +43,48 @@ for n in sample_sizes:
 
 ```
 
+
+## Comparing Estimators: Sample Mean vs First Observation
+
+```{python}
+import numpy as np
+
+np.random.seed(123)
+
+mu = 120
+sigma = 15
+n = 10          # sample size
+n_rep = 10000   # number of simulations
+
+means = []
+first_obs = []
+
+for _ in range(n_rep):
+    sample = np.random.normal(mu, sigma, size=n)
+    means.append(np.mean(sample))
+    first_obs.append(sample[0])
+
+means = np.array(means)
+first_obs = np.array(first_obs)
+
+# Compute empirical bias, variance, and MSE
+def summarize(estimates, true):
+    bias = np.mean(estimates) - true
+    var = np.var(estimates, ddof=0)
+    mse = np.mean((estimates - true)**2)
+    return bias, var, mse
+
+bias_mean, var_mean, mse_mean = summarize(means, mu)
+bias_first, var_first, mse_first = summarize(first_obs, mu)
+
+print("Sample mean estimator:")
+print(f"  Bias = {bias_mean:.3f}")
+print(f"  Var  = {var_mean:.3f}")
+print(f"  MSE  = {mse_mean:.3f}")
+
+print("\nFirst observation estimator:")
+print(f"  Bias = {bias_first:.3f}")
+print(f"  Var  = {var_first:.3f}")
+print(f"  MSE  = {mse_first:.3f}")
+
+```
