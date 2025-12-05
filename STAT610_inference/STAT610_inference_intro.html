@@ -85,6 +85,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#simulation-of-lln-and-clt-for-systolic-blood-pressure" id="toc-simulation-of-lln-and-clt-for-systolic-blood-pressure" class="nav-link active" data-scroll-target="#simulation-of-lln-and-clt-for-systolic-blood-pressure">Simulation of LLN and CLT for Systolic Blood Pressure</a></li>
   <li><a href="#comparing-estimators-sample-mean-vs-first-observation" id="toc-comparing-estimators-sample-mean-vs-first-observation" class="nav-link" data-scroll-target="#comparing-estimators-sample-mean-vs-first-observation">Comparing Estimators: Sample Mean vs First Observation</a></li>
+  <li><a href="#confidence-interval-simulation-for-systolic-bp" id="toc-confidence-interval-simulation-for-systolic-bp" class="nav-link" data-scroll-target="#confidence-interval-simulation-for-systolic-bp">Confidence Interval Simulation for Systolic BP</a></li>
   </ul>
 </nav>
 </div>
@@ -117,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="simulation-of-lln-and-clt-for-systolic-blood-pressure" class="level2">
 <h2 class="anchored" data-anchor-id="simulation-of-lln-and-clt-for-systolic-blood-pressure">Simulation of LLN and CLT for Systolic Blood Pressure</h2>
-<div id="2d30219b" class="cell" data-execution_count="1">
+<div id="8757b93b" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -183,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="comparing-estimators-sample-mean-vs-first-observation" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-estimators-sample-mean-vs-first-observation">Comparing Estimators: Sample Mean vs First Observation</h2>
-<div id="ffb1743f" class="cell" data-execution_count="2">
+<div id="84792939" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -236,6 +237,45 @@ First observation estimator:
   Bias = -0.015
   Var  = 228.219
   MSE  = 228.219</code></pre>
+</div>
+</div>
+</section>
+<section id="confidence-interval-simulation-for-systolic-bp" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-interval-simulation-for-systolic-bp">Confidence Interval Simulation for Systolic BP</h2>
+<div id="b18ea04a" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> t</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> <span class="dv">120</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>n_rep <span class="op">=</span> <span class="dv">5000</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>lower_bounds <span class="op">=</span> []</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>upper_bounds <span class="op">=</span> []</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_rep):</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    sample <span class="op">=</span> np.random.normal(mu, sigma, size<span class="op">=</span>n)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    xbar <span class="op">=</span> np.mean(sample)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.std(sample, ddof<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    t_crit <span class="op">=</span> t.ppf(<span class="fl">0.975</span>, df<span class="op">=</span>n<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    lower <span class="op">=</span> xbar <span class="op">-</span> t_crit <span class="op">*</span> s <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    upper <span class="op">=</span> xbar <span class="op">+</span> t_crit <span class="op">*</span> s <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    lower_bounds.append(lower)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    upper_bounds.append(upper)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Coverage probability</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>coverage <span class="op">=</span> np.mean([<span class="dv">1</span> <span class="cf">if</span> lb <span class="op">&lt;=</span> mu <span class="op">&lt;=</span> ub <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> lb, ub <span class="kw">in</span> <span class="bu">zip</span>(lower_bounds, upper_bounds)])</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Empirical coverage probability ≈ </span><span class="sc">{</span>coverage<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Empirical coverage probability ≈ 0.947</code></pre>
 </div>
 </div>
 </section>
