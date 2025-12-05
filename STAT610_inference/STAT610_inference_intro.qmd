@@ -1,0 +1,45 @@
+---
+title: "STAT 610 – Introduction to Statistical Inference (Bootcamp)"
+author: "Dr. Mighty Itauma"
+format:
+  html:
+    toc: true
+    code-fold: true
+    df-print: paged
+jupyter: python3
+---
+
+## Simulation of LLN and CLT for Systolic Blood Pressure
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+# Suppose true systolic BP in a population ~ Normal(120, 15^2)
+mu = 120
+sigma = 15
+
+def simulate_sample_means(n, n_rep=5000):
+    means = []
+    for _ in range(n_rep):
+        sample = np.random.normal(mu, sigma, size=n)
+        means.append(np.mean(sample))
+    return np.array(means)
+
+sample_sizes = [5, 20, 100]
+
+for n in sample_sizes:
+    means = simulate_sample_means(n)
+    print(f"n = {n}: mean of sample means = {means.mean():.2f}, sd = {means.std():.2f}")
+    
+    plt.figure()
+    plt.hist(means, bins=40, density=True)
+    plt.title(f"Sampling distribution of mean SBP (n={n})")
+    plt.xlabel("Sample mean SBP")
+    plt.ylabel("Density")
+    plt.show()
+
+```
+
